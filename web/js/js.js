@@ -5,7 +5,7 @@ $(document).ready(function  () {
 	$('#username').blur(function  () {
 		var username = $('#username').val();
 		$.ajax({
-			url:"http://localhsot/users",
+			url:"http://localhost/hello",
 			jsonp:"callback",
 			dataType:"jsonp",
 			data:{
@@ -20,7 +20,7 @@ $(document).ready(function  () {
 
 	//login button listen...
 	$('#login').click(function(){
-		$.get('/views/css/css.css',function  (data,status) {
+		$.get('/css/css.css',function  (data,status) {
 			alert("Data: " + data + "\nStatus: " + status);
 		});
 	});

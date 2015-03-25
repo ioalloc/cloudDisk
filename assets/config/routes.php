@@ -2,9 +2,9 @@
 
 return array(
 	'default' => array(
-		'(/<controller>(/<action>(/<id>)))', 
+		'(/<controller>(/<action>(/<id>)))',
 		array(
-			'controller' => 'hello',
+			'controller' => 'login',
 			'action' => 'index'
 		),
 	),
