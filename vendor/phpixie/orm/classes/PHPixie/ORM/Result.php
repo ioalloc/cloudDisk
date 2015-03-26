@@ -19,7 +19,7 @@ class Result implements \Iterator
 	 * @var \PHPixie\Pixie
 	 */
 	public $pixie;
-	
+
 	/**
 	 * Name of the model that the rows belong to
 	 * @var string
@@ -72,7 +72,7 @@ class Result implements \Iterator
 	{
 		$this->_dbresult->rewind();
 	}
-	
+
 	/**
 	 * Builds a model instance based on row data.
 	 *
@@ -80,7 +80,7 @@ class Result implements \Iterator
 	 * @return \PHPixie\ORM\Model Model instance initialized with item data
 	 */
 	public function build_model($data) {
-		
+
 		$model = $this->pixie->orm->get($this->_model);
 
 		if (empty($data))
@@ -124,11 +124,10 @@ class Result implements \Iterator
 				}
 			}
 		}
+		return $model;
 
-		return $model;	
-		
 	}
-	
+
 	/**
 	 * Gets an ORM Model of the current row
 	 *
@@ -139,7 +138,6 @@ class Result implements \Iterator
 		$data = $this->_dbresult->valid()
 			?((array) $this->_dbresult->current())
 			:null;
-			
 		return $this->build_model($data);
 	}
 
