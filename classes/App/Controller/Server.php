@@ -16,12 +16,22 @@ class server extends \App\Service {
 			 ->find();
 		//if login success,and redirect to home
 		if ($user->loaded()) {
-			if ($p == $user->password) {
-				$this->returns = 'success';
+			if ($p === $user->password) {
 				session_start();
 				$_SESSION['user'] = $u;
-				error_log(implode($_SESSION));
+				$this->returns = 'success';
 			}
+		}else{
+			$this->returns = 'failure';
+		}
+	}
+
+	public function action_logout()
+	{
+		session_start();
+		if (isset($_SESSION['user'])) {
+			unset($_SESSION['user']);
+			$this->returns = 'success';
 		}
 	}
 

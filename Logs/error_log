@@ -1,30 +1,27 @@
-[26-Mar-2015 18:44:26 Asia/Chongqing] 
-[26-Mar-2015 19:02:23 Asia/Chongqing] 2|test|123456|a@b.com|你好
-[26-Mar-2015 19:03:06 Asia/Chongqing] 1|wxw|e10adc3949ba59abbe56e057f20f883e|wxwlegend@gmail.com|测试
-[26-Mar-2015 19:03:21 Asia/Chongqing] 4|wang|123456|a@b.com|hehe
-[26-Mar-2015 19:03:34 Asia/Chongqing] 3|xixi|123456|example@example.com|test
-[26-Mar-2015 19:42:11 Asia/Chongqing] 3xixi123456example@example.comtest
-[26-Mar-2015 19:52:01 Asia/Chongqing] 123456
-[26-Mar-2015 19:52:25 Asia/Chongqing] 123456
-[26-Mar-2015 19:52:33 Asia/Chongqing] 123456
-[26-Mar-2015 19:52:36 Asia/Chongqing] e10adc3949ba59abbe56e057f20f883e
-[26-Mar-2015 20:30:36 Asia/Chongqing] jQuery2130489421968541227_1427372993472wxwjson1427372993474
-[26-Mar-2015 20:30:50 Asia/Chongqing] 
-[26-Mar-2015 20:31:37 Asia/Chongqing] GET:jQuery2130489421968541227_1427372993472wxwjson1427372993475
-[26-Mar-2015 20:32:11 Asia/Chongqing] GET:jQuery2130489421968541227_1427372993472wxwjson1427372993476
-[26-Mar-2015 20:32:11 Asia/Chongqing] POST:
-[26-Mar-2015 20:32:25 Asia/Chongqing] GET:
-[26-Mar-2015 20:32:25 Asia/Chongqing] POST:wxw
-[26-Mar-2015 20:32:38 Asia/Chongqing] GET:
-[26-Mar-2015 20:32:38 Asia/Chongqing] POST:wxw1234
-[26-Mar-2015 20:33:40 Asia/Chongqing] PHP Fatal error:  Function name must be a string in /usr/share/nginx/cloudDisk/classes/App/Controller/Server.php on line 12
-[26-Mar-2015 20:33:53 Asia/Chongqing] PHP Fatal error:  Function name must be a string in /usr/share/nginx/cloudDisk/classes/App/Controller/Server.php on line 12
-[26-Mar-2015 20:33:55 Asia/Chongqing] PHP Fatal error:  Function name must be a string in /usr/share/nginx/cloudDisk/classes/App/Controller/Server.php on line 12
-[26-Mar-2015 21:09:52 Asia/Chongqing] wxw
-[26-Mar-2015 21:10:33 Asia/Chongqing] wxw
-[26-Mar-2015 21:22:08 Asia/Chongqing] wxw
-[26-Mar-2015 21:22:40 Asia/Chongqing] wxw
-[26-Mar-2015 21:23:19 Asia/Chongqing] wxw
-[26-Mar-2015 21:23:35 Asia/Chongqing] 
-[26-Mar-2015 21:24:09 Asia/Chongqing] wxw
-[26-Mar-2015 21:24:10 Asia/Chongqing] wxw
+[27-Mar-2015 09:11:05 Asia/Chongqing] 
+[27-Mar-2015 09:12:51 Asia/Chongqing] 
+[27-Mar-2015 09:13:16 Asia/Chongqing] wxw
+[27-Mar-2015 09:13:19 Asia/Chongqing] wxw
+[27-Mar-2015 09:13:56 Asia/Chongqing] wxw
+[27-Mar-2015 09:25:50 Asia/Chongqing] 
+[27-Mar-2015 09:27:22 Asia/Chongqing] 
+[27-Mar-2015 09:27:25 Asia/Chongqing] 
+[27-Mar-2015 09:27:27 Asia/Chongqing] 
+[27-Mar-2015 09:27:36 Asia/Chongqing] 
+[27-Mar-2015 09:27:43 Asia/Chongqing] wxw
+[27-Mar-2015 09:27:44 Asia/Chongqing] wxw
+[27-Mar-2015 09:27:49 Asia/Chongqing] wxw
+[27-Mar-2015 09:32:35 Asia/Chongqing] wxw
+[27-Mar-2015 09:32:37 Asia/Chongqing] wxw
+[27-Mar-2015 09:47:09 Asia/Chongqing] wxw
+[27-Mar-2015 09:47:13 Asia/Chongqing] wxw
+[27-Mar-2015 09:47:14 Asia/Chongqing] wxw
+[27-Mar-2015 09:47:15 Asia/Chongqing] wxw
+[27-Mar-2015 09:47:16 Asia/Chongqing] wxw
+[27-Mar-2015 09:48:01 Asia/Chongqing] wxw
+[27-Mar-2015 09:49:07 Asia/Chongqing] 
+[27-Mar-2015 09:49:09 Asia/Chongqing] 
+[27-Mar-2015 09:50:08 Asia/Chongqing] wxw
+[27-Mar-2015 09:50:10 Asia/Chongqing] wxw
+[27-Mar-2015 09:50:27 Asia/Chongqing] 
+[27-Mar-2015 09:50:29 Asia/Chongqing] 

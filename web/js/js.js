@@ -23,8 +23,30 @@ $(document).ready(function  () {
 		var username = $('#username').val();
 		var password = $('#password').val();
 		$.post('/server/login', {u:username,p:password},function  (data,status) {
-			alert("Data: " + data + "\nStatus: " + status);
-			window.location.replace("/home");
+			if (data == 'success') {
+				window.location.replace("/home");
+			}
+			else{
+				alert('login failed,please try again!');
+			}
 		});
 	});
+
+	//logout button listen
+	$('#logout').click(function () {
+		$.post('/server/logout', function  (data,status) {
+			alert("Data: " + data + "\nStatus: " + status);
+			if (data == 'success') {
+				window.location.replace("/login");
+			}
+		});
+	});
+
+
+	//sign up button listen
+	$('#signup').click(function  () {
+
+	});
+
+
 });

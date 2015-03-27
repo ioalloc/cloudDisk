@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class login extends \App\Page {
+class signup extends \App\Page {
 
 	public function action_index() {
 		session_start();
@@ -11,7 +11,7 @@ class login extends \App\Page {
 			$this->view->subview = 'home';
 			$this->view->username = $_SESSION["user"];
 		}else{
-			$this->view->subview = 'login';
+			$this->view->subview = 'signup';
 		}
 	}
 

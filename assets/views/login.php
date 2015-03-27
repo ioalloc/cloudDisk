@@ -7,12 +7,6 @@
 			<input id="password" type="password" name="password">
 			<span class="help-block">Enter the fairy realm.</span>
 			<input id="login" type="button" value="login">
+			<a href="/signup">sign in</a>
 		</fieldset>
 </div>
-<script>
-    //A very basic way to open a popup
-    function popup(link, windowname) {
-        window.open(link.href, windowname, 'width=400,height=200,scrollbars=yes');
-        return false;
-    }
-</script>
