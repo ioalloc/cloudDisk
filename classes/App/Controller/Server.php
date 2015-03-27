@@ -5,20 +5,27 @@ namespace App\Controller;
 class server extends \App\Service {
 
 	public function action_index() {
+		if (empty($_POST)) {
+			return $this->redirect('/');
+		}
 	}
 
 	public function action_login()
 	{
-		$u = $_POST['u'];
+		if (empty($_POST)) {
+			return $this->redirect('/');
+		}
+		// error_log(implode(($_POST)));
+		$e = $_POST['e'];
 		$p = md5($_POST['p']);
 		$user = $this->pixie->orm->get('users')
-			 ->where('username',$u)
+			 ->where('email',$e)
 			 ->find();
 		//if login success,and redirect to home
 		if ($user->loaded()) {
 			if ($p === $user->password) {
 				session_start();
-				$_SESSION['user'] = $u;
+				$_SESSION['user'] = $e;
 				$this->returns = 'success';
 			}
 		}else{
@@ -35,9 +42,37 @@ class server extends \App\Service {
 		}
 	}
 
-	public function action_checkname()
+	public function action_signup()
 	{
-		$u = $_GET['u'];
+		if (empty($_POST)) {
+			return $this->redirect('/signup');
+		}
+		$e = $_POST['e'];
+		$p = md5($_POST['p']);
+		$user = $this->pixie->orm->get('users')
+			 ->where('email',$e)
+			 ->find();
+		//if the email is exist
+		if ($user->loaded()) {
+			$this->returns = 'failure';
+		}else{
+			$user->username = $e;
+			$user->password = $p;
+			$user->email = $e;
+			$user->save();
+			session_start();
+			$_SESSION['user'] = $e;
+			$this->returns = 'success';
+		}
+
+	}
+
+	public function action_checkemail()
+	{
+		if (empty($_POST)) {
+			return $this->redirect('/');
+		}
+		$e = $_GET['e'];
 	}
 
 }

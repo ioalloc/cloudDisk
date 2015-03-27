@@ -2,14 +2,14 @@ $(document).ready(function  () {
 
 
 	//input detect
-	$('#username').blur(function  () {
-		var username = $('#username').val();
+	$('#signup-form #email').blur(function  () {
+		var email = $('#email').val();
 		$.ajax({
-			url:"http://localhost/server/checkname",
+			url:"http://localhost/server/checkemail",
 			jsonp:"callback",
 			dataType:"jsonp",
 			data:{
-				u:username,
+				e:email,
 				format:"json"
 			},
 			success: function  (response) {
@@ -20,9 +20,9 @@ $(document).ready(function  () {
 
 	//login button listen...
 	$('#login').click(function(){
-		var username = $('#username').val();
+		var email = $('#email').val();
 		var password = $('#password').val();
-		$.post('/server/login', {u:username,p:password},function  (data,status) {
+		$.post('/server/login', {e:email,p:password},function  (data,status) {
 			if (data == 'success') {
 				window.location.replace("/home");
 			}
@@ -35,7 +35,6 @@ $(document).ready(function  () {
 	//logout button listen
 	$('#logout').click(function () {
 		$.post('/server/logout', function  (data,status) {
-			alert("Data: " + data + "\nStatus: " + status);
 			if (data == 'success') {
 				window.location.replace("/login");
 			}
@@ -46,6 +45,14 @@ $(document).ready(function  () {
 	//sign up button listen
 	$('#signup').click(function  () {
 
+		//get the account information
+		var email = $('#email').val();
+		var password = $('#password').val();
+
+		//post the email and password to server
+		$.post('/server/signup', {e:email,p:password}, function  (data,status) {
+			alert("Data: " + data + "\nStatus: " + status);
+		});
 	});
 
 

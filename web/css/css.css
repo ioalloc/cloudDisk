@@ -1,3 +1,32 @@
 body{
-	background-color: white;
+	background-color: #2089cf;
+}
+
+.form{
+	width: 30%;
+	height: 50%;
+	margin: auto;
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+}
+
+
+.form fieldset{
+	border: none;
+	border-radius: 3px;
+	background-color: #fff;
+}
+
+.form h1{
+	text-align: center;
+}
+
+.form input{
+	margin: 15px 15px 15px 15px;
+	width: 80%;
+	padding: 15px;
+}
+
+.form p{
+	text-align: center;
 }
