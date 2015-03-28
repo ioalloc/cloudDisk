@@ -22,9 +22,27 @@ body{
 }
 
 .form input{
+	border:2px solid #50b9ff;
+	border-radius: 3px;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	box-sizing:border-box;
 	margin: 15px 15px 15px 15px;
-	width: 80%;
+	width: 90%;
 	padding: 15px;
+}
+
+.form input:hover{
+	border:2px solid #2089df;
+}
+
+.form input[type='submit']{
+	border: 0px;
+	background-color: #50b9ff;
+}
+
+.form input[type='submit']:hover{
+	background-color: #2089df;
 }
 
 .form p{

@@ -13,15 +13,16 @@ class server extends \App\Service {
 	public function action_login()
 	{
 		if (empty($_POST)) {
+			error_log("empty");
 			return $this->redirect('/');
 		}
-		// error_log(implode(($_POST)));
 		$e = $_POST['e'];
 		$p = md5($_POST['p']);
 		$user = $this->pixie->orm->get('users')
 			 ->where('email',$e)
 			 ->find();
 		//if login success,and redirect to home
+		error_log($e);
 		if ($user->loaded()) {
 			if ($p === $user->password) {
 				session_start();
@@ -46,25 +47,28 @@ class server extends \App\Service {
 	{
 		if (empty($_POST)) {
 			return $this->redirect('/signup');
-		}
-		$e = $_POST['e'];
-		$p = md5($_POST['p']);
-		$user = $this->pixie->orm->get('users')
-			 ->where('email',$e)
-			 ->find();
-		//if the email is exist
-		if ($user->loaded()) {
-			$this->returns = 'failure';
 		}else{
-			$user->username = $e;
-			$user->password = $p;
-			$user->email = $e;
-			$user->save();
-			session_start();
-			$_SESSION['user'] = $e;
-			$this->returns = 'success';
+			$e = $_POST['e'];
+			$p = md5($_POST['p']);
+			if ($e === '' || $p === '') {
+				return $this->redirect('/signup');
+			}
+			$user = $this->pixie->orm->get('users')
+				 ->where('email',$e)
+				 ->find();
+			//if the email is exist
+			if ($user->loaded()) {
+				$this->returns = 'failure';
+			}else{
+				$user->username = $e;
+				$user->password = $p;
+				$user->email = $e;
+				$user->save();
+				session_start();
+				$_SESSION['user'] = $e;
+				$this->returns = 'success';
+			}
 		}
-
 	}
 
 	public function action_checkemail()

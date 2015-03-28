@@ -23,8 +23,9 @@ $(document).ready(function  () {
 		var email = $('#email').val();
 		var password = $('#password').val();
 		$.post('/server/login', {e:email,p:password},function  (data,status) {
+			alert(data);
 			if (data == 'success') {
-				window.location.replace("/home");
+				window.location.replace("/");
 			}
 			else{
 				alert('login failed,please try again!');
@@ -51,7 +52,12 @@ $(document).ready(function  () {
 
 		//post the email and password to server
 		$.post('/server/signup', {e:email,p:password}, function  (data,status) {
-			alert("Data: " + data + "\nStatus: " + status);
+			if (data == 'success') {
+				window.location.replace("/");
+			}
+			else{
+				alert('sign up failed,please try again!');
+			}
 		});
 	});
 
