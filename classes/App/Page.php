@@ -19,4 +19,16 @@ class Page extends \PHPixie\Controller {
 		$this->response->body = $this->view->render();
 	}
 
+	public function login_check($action='login')
+	{
+		session_start();
+		if (isset($_SESSION["user"])) {
+			$this->view->subview = 'home';
+			$this->view->username = $_SESSION["user"];
+		}else{
+			$this->view->subview = $action;
+		}
+
+	}
+
 }

@@ -79,4 +79,14 @@ class server extends \App\Service {
 		$e = $_GET['e'];
 	}
 
+	public function action_phpinfo()
+	{
+		phpinfo();
+	}
+
+	public function action_upload()
+	{
+		//print_r($_FILES);
+	}
+
 }

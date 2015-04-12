@@ -9,5 +9,6 @@
 		<?php include($subview.'.php');?>
 	</body>
 	<script type="text/javascript" src="/js/jquery2.1.3.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.form.js"></script>
 	<script type="text/javascript" src="/js/js.js"></script>
 </html>
