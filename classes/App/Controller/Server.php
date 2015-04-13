@@ -4,6 +4,8 @@ namespace App\Controller;
 
 class server extends \App\Service {
 
+	protected $user;
+
 	public function action_index() {
 		if (empty($_POST)) {
 			return $this->redirect('/');
@@ -27,6 +29,7 @@ class server extends \App\Service {
 			if ($p === $user->password) {
 				session_start();
 				$_SESSION['user'] = $e;
+				$_SESSION['user_id'] = $user->id;
 				$this->returns = 'success';
 			}
 		}else{
@@ -66,6 +69,7 @@ class server extends \App\Service {
 				$user->save();
 				session_start();
 				$_SESSION['user'] = $e;
+				$_SESSION['user_id'] = $user->id;
 				$this->returns = 'success';
 			}
 		}
@@ -86,7 +90,26 @@ class server extends \App\Service {
 
 	public function action_upload()
 	{
-		//print_r($_FILES);
+		session_start();
+		$user = array('usernsme' => $_SESSION['user'],
+			'user_id' => $_SESSION['user_id']);
+
+
+		$uploaddir = '/usr/share/nginx/uploads/';
+		$uploadfile = $uploaddir . $user['user_id'] . '/' . basename($_FILES['file_upload']['name']);
+
+		echo '<pre>';
+		if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
+			echo "File is valid, and was successfully uploaded.\n";
+		} else {
+			echo "Possible file upload attack!\n";
+		}
+
+		echo 'Here is some more debugging info:';
+		print_r($_FILES);
+
+		print "</pre>";
+
 	}
 
 }
