@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="/css/css.css">
+		<link rel="stylesheet" type="text/css" href="/css/materialize.min.css">
+		<!-- <link rel="stylesheet" type="text/css" href="/css/css.css"> -->
 		<title>cloudDisk</title>
 	</head>
 	<body>
@@ -10,5 +11,6 @@
 	</body>
 	<script type="text/javascript" src="/js/jquery2.1.3.min.js"></script>
 	<script type="text/javascript" src="/js/jquery.form.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
 	<script type="text/javascript" src="/js/js.js"></script>
 </html>

@@ -1,7 +1,7 @@
 $(document).ready(function  () {
 
 
-	//input detect
+	// input detect
 	$('#signup-form #email').blur(function  () {
 		var email = $('#email').val();
 		$.ajax({
@@ -13,7 +13,7 @@ $(document).ready(function  () {
 				format:"json"
 			},
 			success: function  (response) {
-				alert(response);
+				// alert(response);
 			}
 		});
 	});
@@ -23,8 +23,8 @@ $(document).ready(function  () {
 		var email = $('#email').val();
 		var password = $('#password').val();
 		$.post('/server/login', {e:email,p:password},function  (data,status) {
-			alert(data);
 			if (data == 'success') {
+				alert('success');
 				window.location.replace("/");
 			}
 			else{
