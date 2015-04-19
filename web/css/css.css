@@ -1,72 +1,49 @@
 body{
-	background-color: #2089cf;
+	background-color: white;
 }
 
-.form{
-	width: 30%;
-	height: 50%;
-	margin: auto;
-	position: absolute;
-	top: 0; right: 0; bottom: 0; left: 0;
+.login{
+	background-color: #ef9a9a;
 }
 
-
-.form fieldset{
-	border: none;
-	border-radius: 3px;
-	background-color: #fff;
+.login-title{
+	height: 100%;
 }
 
-.form h1{
-	text-align: center;
+.sidenav{
+	list-style: none;
+	box-shadow: 5px 0px 5px #888888;
+	height: 100%;
+	margin-left: -10px;
 }
 
-.form input{
-	border:2px solid #50b9ff;
-	border-radius: 3px;
-	-moz-box-sizing:border-box;
-	-webkit-box-sizing:border-box;
-	box-sizing:border-box;
-	margin: 15px 15px 15px 15px;
-	width: 90%;
-	padding: 15px;
+.logo{
+	padding-left: 20px;
 }
 
-.form input:hover{
-	border:2px solid #2089df;
+.sidenav-item{
+	background-color: ;
+	padding: 15px 0px 15px 0px;
+	cursor: pointer;
 }
 
-.form input[type='submit']{
-	border: 0px;
-	background-color: #50b9ff;
+.sidenav-item:hover{
+	background-color: #ef9a9a;
 }
 
-.form input[type='submit']:hover{
-	background-color: #2089df;
+.fileview-head{
+	list-style: none;
 }
 
-.form p{
-	text-align: center;
+.fileview-head div{
+	border: 1px solid black;
 }
 
-#progress{
-	position:relative;
-	width:400px;
-	border: 1px solid #ddd;
-	padding: 1px;
-	border-radius: 3px;
+.fileview-head li{
+	padding: 10px;
 }
 
-#bar{
-	background-color: #B4F5B4;
-	width:0%;
-	height:20px;
-	border-radius: 3px;
-}
-
-#percent{
-	position:absolute;
-	display:inline-block;
-	top:3px;
-	left:48%;
+.fileview-content{
+	height: 300px;
+	overflow: auto;
 }

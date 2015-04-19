@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="card medium col s4">
+	<div class="card medium col s12 m4 offset-m4 center-align">
 	<div class="card-image waves-effect waves-block waves-light">
 		<img class="activator" src="img/login.jpg">
 	</div>
@@ -7,7 +7,7 @@
 		<span class="card-title activator grey-text text-darken-4">Click to Login<i class="mdi-navigation-more-vert right"></i></span>
 	</div>
 	<div class="card-reveal">
-		<span class="card-title grey-text text-darken-4">Card Title <i class="mdi-navigation-close right"></i></span>
+		<span class="card-title grey-text text-darken-4 tiny">Login <i class="mdi-navigation-close right"></i></span>
 		<div class="row">
 			<form class="col s11" id="login-form">
 				<div class="row">
@@ -25,14 +25,20 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col s12">
+					<div class="col s5">
 						<a class="btn waves-effect waves-light" id="login">
 							Login
 							<i class="mdi-content-send right"></i>
 						</a>
 					</div>
+					<div class="col s5 offset-s2">
+						<a class="btn waves-effect waves-light" id="signup">
+							signup
+							<i class="mdi-content-send right"></i>
+						</a>
+					</div>
+
 				</div>
-				<p>Don't have account?<a href="/signup">sign in</a></p>
 			</form>
 		</div>
 	</div>
