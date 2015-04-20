@@ -1,8 +1,8 @@
 <ul id="userdropdown" class="dropdown-content">
-  <li><a href="#!">My profile</a></li>
-  <li><a href="#!">Safe</a></li>
+  <li><a href="#">My profile</a></li>
+  <li><a href="#">Safe</a></li>
   <li class="divider"></li>
-  <li id="logout"><a href="#!">logout</a></li>
+  <li id="logout"><a href="#">logout</a></li>
 </ul>
 <div class="navbar-fixed">
   <nav class="top-nav">
@@ -12,7 +12,9 @@
       	<li>
       		<a href="#" class="dropdown-button" data-activates="userdropdown">
       			<i class="mdi-action-account-circle left"></i>
-      			<?php echo $username ?>
+      			<?php if (!empty($username)) {
+                    echo $username;
+                } ?>
       		</a>
       	</li>
         <li><a href="#"><i class="mdi-action-search left"></i>search</a></li>
@@ -31,7 +33,7 @@
     <div class="sidenav center">
   		<li class="sidenav-item">All file</li>
   		<li class="divider"></li>
-  		<li class="sidenav-item">Recentlly</li>
+  		<li class="sidenav-item">Recently</li>
   		<li class="divider"></li>
   		<li class="sidenav-item">Image</li>
   		<li class="divider"></li>
@@ -76,36 +78,6 @@
 				</div>
 			</div>
 			<div class="row fileview-content">
-				<ul class="col s6 m6">
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-					<li>as</li>
-				</ul>
-				<ul class="col s3 m3">
-					<li>as</li>
-				</ul>
-				<ul class="col s3 m3">
-					<li>as</li>
-				</ul>
 			</div>
 		</div>
 		<div id="message"></div>

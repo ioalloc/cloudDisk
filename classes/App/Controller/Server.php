@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
-class server extends \App\Service {
+use App\Service;
+
+class server extends Service {
 
 	protected $user;
+    protected $uploaddir = '/usr/share/nginx/uploads/';
 
 	public function action_index() {
 		if (empty($_POST)) {
@@ -15,9 +18,8 @@ class server extends \App\Service {
 	public function action_login()
 	{
 		if (empty($_POST)) {
-			error_log("empty");
-			return $this->redirect('/');
-		}
+            return $this->redirect('/');
+        }
 		$e = $_POST['e'];
 		$p = md5($_POST['p']);
 		$user = $this->pixie->orm->get('users')
@@ -46,7 +48,10 @@ class server extends \App\Service {
 		}
 	}
 
-	public function action_signup()
+    /**
+     *
+     */
+    public function action_signup()
 	{
 		if (empty($_POST)) {
 			return $this->redirect('/signup');
@@ -66,7 +71,8 @@ class server extends \App\Service {
 				$user->username = $e;
 				$user->password = $p;
 				$user->email = $e;
-				$user->save();
+				$res=$user->save();
+                mkdir($this->uploaddir.$res->id);
 				session_start();
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $user->id;
@@ -81,6 +87,7 @@ class server extends \App\Service {
 			return $this->redirect('/');
 		}
 		$e = $_GET['e'];
+        return 'ee';
 	}
 
 	public function action_phpinfo()
@@ -91,12 +98,11 @@ class server extends \App\Service {
 	public function action_upload()
 	{
 		session_start();
-		$user = array('usernsme' => $_SESSION['user'],
+		$user = array('username' => $_SESSION['user'],
 			'user_id' => $_SESSION['user_id']);
 
 
-		$uploaddir = '/usr/share/nginx/uploads/';
-		$uploadfile = $uploaddir . $user['user_id'] . '/' . basename($_FILES['file_upload']['name']);
+		$uploadfile = $this->uploaddir . $user['user_id'] . '/' . basename($_FILES['file_upload']['name']);
 
 		echo '<pre>';
 		if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
@@ -108,8 +114,39 @@ class server extends \App\Service {
 		echo 'Here is some more debugging info:';
 		print_r($_FILES);
 
-		print "</pre>";
+		echo "</pre>";
 
 	}
+
+    /**
+     *
+     */
+    public function action_getdir(){
+        session_start();
+        if(isset($_SESSION['user'])) {
+            $dir = $this->uploaddir . $_SESSION['user_id'] . $_POST['dir'] . '*';
+            $res = glob($dir);
+            $filelist = array();
+            $fileinfo = array();
+            foreach ($res as $file) {
+                $fileinfo['name'] = basename($file);
+                $fileinfo['type'] = filetype($file);
+                $fileinfo['size'] = $this->formatBytes(filesize($file));
+                $fileinfo['time'] = date('Y-m-d H:i:s', filectime($file));
+                $fileinfo['extension'] = pathinfo($file, PATHINFO_EXTENSION);
+                array_push($filelist, $fileinfo);
+            }
+            echo json_encode($filelist);
+            //print_r($filelist);
+        }
+    }
+
+    function formatBytes($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = array('', 'k', 'M', 'G', 'T');
+
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    }
 
 }

@@ -22,7 +22,7 @@ body{
 }
 
 .sidenav-item{
-	background-color: ;
+	background-color: #ffffff;
 	padding: 15px 0px 15px 0px;
 	cursor: pointer;
 }
@@ -46,4 +46,15 @@ body{
 .fileview-content{
 	height: 300px;
 	overflow: auto;
+}
+
+.fileview-content ul{
+    padding: 0px 5px 0px 5px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.fileview-content ul:hover{
+    background-color: #ef9a9a;
+
 }
