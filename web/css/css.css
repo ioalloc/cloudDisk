@@ -12,7 +12,7 @@ body{
 
 .sidenav{
 	list-style: none;
-	box-shadow: 5px 0px 5px #888888;
+	box-shadow: 5px 0 5px #888888;
 	height: 100%;
 	margin-left: -10px;
 }
@@ -23,7 +23,7 @@ body{
 
 .sidenav-item{
 	background-color: #ffffff;
-	padding: 15px 0px 15px 0px;
+	padding: 15px 0 15px 0;
 	cursor: pointer;
 }
 
@@ -44,17 +44,22 @@ body{
 }
 
 .fileview-content{
-	height: 300px;
+	height: 450px;
 	overflow: auto;
 }
 
-.fileview-content ul{
-    padding: 0px 5px 0px 5px;
-    margin-bottom: 0px;
-    cursor: pointer;
+.file{
+    overflow: hidden;
 }
 
-.fileview-content ul:hover{
-    background-color: #ef9a9a;
+.file img{
+    margin-top: 3px;
+    transition: box-shadow 2s;
+}
 
+.file:hover{
+    cursor: pointer;
+    background-color: honeydew;
+    box-shadow: 5px 0 5px #888888;
+    border-radius: 5px;
 }

@@ -66,17 +66,17 @@
 			<div id="percent">0%</div>
 		</div>
 		<div class="fileview">
-			<div class="row fileview-head">
-				<div class="col s6 m6">
-					<li>filename</li>
-				</div>
-				<div class="col s3 m3">
-					<li>size</li>
-				</div>
-				<div class="col s3 m3">
-					<li>date</li>
-				</div>
-			</div>
+<!--			<div class="row fileview-head">-->
+<!--				<div class="col s6 m6">-->
+<!--					<li>filename</li>-->
+<!--				</div>-->
+<!--				<div class="col s3 m3">-->
+<!--					<li>size</li>-->
+<!--				</div>-->
+<!--				<div class="col s3 m3">-->
+<!--					<li>date</li>-->
+<!--				</div>-->
+<!--			</div>-->
 			<div class="row fileview-content">
 			</div>
 		</div>

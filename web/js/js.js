@@ -110,11 +110,19 @@ getDir = function(url){
     }).done(function(data){
         var fileview_content = $('.fileview-content');
         $.each(data,function(i,item){
-            var li_name = '<li class="col s6 m6">' + item['name'] + '</li>';
-            var li_size = '<li class="col s3 m3">' + item['size'] + '</li>';
-            var li_time = '<li class="col s3 m3">' + item['time'] + '</li>';
-            var row = '<ul class="row">' + li_name + li_size + li_time + '</ul>';
-            fileview_content.append(row);
+            var name = item['name'];
+            if(name.length > 15){
+                name = name.slice(0,15) + '...';
+            }
+            var img;
+            var file =
+                '<div class="col s3 m2 file center">\n' +
+                    '<img src="icon/www.svg"/> ' +
+                    '<p>' +
+                    name +
+                    '</p>' +
+                '</div>';
+            fileview_content.append(file);
         });
     });
 }
