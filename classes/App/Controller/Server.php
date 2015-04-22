@@ -133,7 +133,9 @@ class server extends Service {
                 $fileinfo['type'] = filetype($file);
                 $fileinfo['size'] = $this->formatBytes(filesize($file));
                 $fileinfo['time'] = date('Y-m-d H:i:s', filectime($file));
-                $fileinfo['extension'] = pathinfo($file, PATHINFO_EXTENSION);
+                $fileinfo['extension'] = $icon = pathinfo($file, PATHINFO_EXTENSION);
+                $icon = '/usr/share/nginx/cloudDisk/web/icon/' . $icon . '.svg';
+                $fileinfo['icon'] = (basename(implode(glob($icon))) == '')?'blank.svg':basename(implode(glob($icon)));
                 array_push($filelist, $fileinfo);
             }
             echo json_encode($filelist);

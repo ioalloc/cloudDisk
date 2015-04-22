@@ -54,7 +54,7 @@ body{
 
 .file img{
     margin-top: 3px;
-    transition: box-shadow 2s;
+    transition: box-shadow 0.5s;
 }
 
 .file:hover{

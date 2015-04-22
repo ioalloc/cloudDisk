@@ -65,7 +65,7 @@
 			<div id="bar"></div>
 			<div id="percent">0%</div>
 		</div>
-		<div class="fileview">
+		<div class="fileview" id="file">
 <!--			<div class="row fileview-head">-->
 <!--				<div class="col s6 m6">-->
 <!--					<li>filename</li>-->

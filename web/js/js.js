@@ -95,6 +95,11 @@ $(document).ready(function  () {
 	//file upload ajax submit
 	$('#fileSubmit').ajaxForm(options);
 
+
+    $('.fileview-content').children().click(function(){
+        alert(this.id);
+    });
+
 });
 
 locationToTome = function(){
@@ -109,15 +114,32 @@ getDir = function(url){
         dataType: 'json'
     }).done(function(data){
         var fileview_content = $('.fileview-content');
+        var dirCount = 0;
+        for(var i=0;i<data.length;i++){
+            if(data[i]['type'] == 'dir'){
+                var dir = data.splice(i,1);
+                data.splice(dirCount,0,dir[0]);
+                dirCount++;
+            }
+        }
         $.each(data,function(i,item){
             var name = item['name'];
             if(name.length > 15){
                 name = name.slice(0,15) + '...';
             }
             var img;
+            if(item['type'] == 'file'){
+                img = '<img src="icon/' +
+                    item['icon'] +
+                    '"/> ';
+            }else{
+                img = '<img src="icon/folder.svg"/> ';
+            }
             var file =
-                '<div class="col s3 m2 file center">\n' +
-                    '<img src="icon/www.svg"/> ' +
+                '<div id="' +
+                    item['name'] +
+                    '" class="col s3 m2 file center">\n' +
+                    img +
                     '<p>' +
                     name +
                     '</p>' +
