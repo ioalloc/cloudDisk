@@ -15,6 +15,7 @@ body{
 	box-shadow: 5px 0 5px #888888;
 	height: 100%;
 	margin-left: -10px;
+    margin-top: -10px;
 }
 
 .logo{
@@ -29,6 +30,23 @@ body{
 
 .sidenav-item:hover{
 	background-color: #ef9a9a;
+}
+
+.toolbar{
+    margin-top: 10px;
+    height: 100px;
+}
+
+.path{
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+.waves-teal{
+    margin-top: 5px;
+    padding-left: 2px;
+    padding-right: 2px;
+    text-transform: none;
 }
 
 .fileview-head{
@@ -55,6 +73,11 @@ body{
 .file img{
     margin-top: 3px;
     transition: box-shadow 0.5s;
+}
+
+.collapsible-body{
+    height: 120px;
+    overflow: auto;
 }
 
 .file:hover{

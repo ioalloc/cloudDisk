@@ -1,6 +1,14 @@
+//js.js
+
+var files;
+var path = new Array();
+
 $(document).ready(function  () {
 
-    getDir('/');
+
+    //$('.collapsible').collapsible({
+    //    accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    //});
 
 	// input detect
 	$('#signup-form').find('#email').blur(function  () {
@@ -96,55 +104,87 @@ $(document).ready(function  () {
 	$('#fileSubmit').ajaxForm(options);
 
 
-    $('.fileview-content').children().click(function(){
-        alert(this.id);
-    });
+    //$('.fileview-content').children().each(function(){
+    //    $(this).click(function(){
+    //        alert(this.id);
+    //    });
+    //});
+    //
+    //$('#dir').on('click',function(){
+    //    alert(this.id);
+    //});
 
+
+    getDir(path);
+
+});
+
+
+$(document).on('click','div.file',function(){
+    //alert(files[$(this).index()]['name']);
+    if(files[$(this).index()]['type'] == 'dir'){
+        path.push(files[$(this).index()]['name']);
+        getDir(path);
+    }
 });
 
 locationToTome = function(){
     window.location.replace("/");
 }
 
-getDir = function(url){
+getDir = function(path){
+    var url = '/';
+    $.each(path,function(i,dir){
+        url = url + dir;
+    })
+
+    url = url + '/';
+
     $.ajax({
         method: "POST",
         url: 'server/getdir',
         data: {dir:url},
         dataType: 'json'
-    }).done(function(data){
-        var fileview_content = $('.fileview-content');
-        var dirCount = 0;
-        for(var i=0;i<data.length;i++){
-            if(data[i]['type'] == 'dir'){
-                var dir = data.splice(i,1);
-                data.splice(dirCount,0,dir[0]);
-                dirCount++;
+    }).done(function(data,status){
+        if(status == 'success') {
+            var fileview_content = $('.fileview-content');
+            fileview_content.empty();
+            //show folder at begin,this block is to adjust data's index
+            var dirCount = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i]['type'] == 'dir') {
+                    var dir = data.splice(i, 1);
+                    data.splice(dirCount, 0, dir[0]);
+                    dirCount++;
+                }
             }
-        }
-        $.each(data,function(i,item){
-            var name = item['name'];
-            if(name.length > 15){
-                name = name.slice(0,15) + '...';
-            }
-            var img;
-            if(item['type'] == 'file'){
-                img = '<img src="icon/' +
+            files = data;
+
+            //show file view
+            $.each(data, function (i, item) {
+                var name = item['name'];
+                if (name.length > 15) {
+                    name = name.slice(0, 15) + '...';
+                }
+                var img;
+                if (item['type'] == 'file') {
+                    img = '<img src="icon/' +
                     item['icon'] +
                     '"/> ';
-            }else{
-                img = '<img src="icon/folder.svg"/> ';
-            }
-            var file =
-                '<div id="' +
+                } else {
+                    img = '<img src="icon/folder.svg"/> ';
+                }
+                var file =
+                    '<div id="' +
                     item['name'] +
                     '" class="col s3 m2 file center">\n' +
                     img +
                     '<p>' +
                     name +
                     '</p>' +
-                '</div>';
-            fileview_content.append(file);
-        });
+                    '</div>';
+                fileview_content.append(file);
+            });
+        }
     });
 }
