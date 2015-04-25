@@ -53,42 +53,29 @@
     <!-- Grey navigation panel -->
     <div class="sidenav center">
 
-        <ul class="collapsible" data-collapsible="expandable">
+        <ul class="collapsible " data-collapsible="expandable">
             <li>
-                <div class="collapsible-header">All File</div>
+                <div class="collapsible-header sidenav-item"><a>Home</a></div>
             </li>
             <li>
-                <div class="collapsible-header">Video</div>
+                <div class="collapsible-header sidenav-item"><a>Video</a></div>
             </li>
             <li>
-                <div class="collapsible-header">Sound</div>
+                <div class="collapsible-header sidenav-item"><a>Sound</a></div>
             </li>
             <li>
-                <div class="collapsible-header">Image</div>
+                <div class="collapsible-header sidenav-item"><a>Image</a></div>
             </li>
             <li>
-                <div class="collapsible-header">Recently</div>
+                <div class="collapsible-header sidenav-item"><a>Recently</a></div>
             </li>
             <li>
-                <div class="collapsible-header">Uploading</div>
+                <div class="collapsible-header sidenav-item"><a>Uploading</a></div>
                 <div class="progress button-on">
-                    <div class="determinate" style="width: 65%"></div>
+                    <div id="bar" class="determinate" style="width: 0%"></div>
                 </div>
                 <div class="collapsible-body">
                     <p>There is no file uploading.</p>
-                </div>
-            </li>
-            <li class="divider"></li>
-            <li>
-                <div class="collapsible-header">Downloading</div>
-                <div class="progress button-on">
-                    <div class="determinate" style="width: 44%"></div>
-                </div>
-                <div class="collapsible-body">
-                    <div class="progress progress-list">
-                        <div class="determinate center" style="width: 44%">
-                        </div>
-                    </div>
                 </div>
             </li>
         </ul>
@@ -107,14 +94,14 @@
                     <i class="mdi-content-add-box left"></i>
                     New Folder
                 </a>
+                <a class="waves-effect waves-light btn disabled">
+                    <i class="mdi-file-cloud-download left"></i>
+                    Download
+                </a>
             </div>
             <div class="row path">
-                <a id="path-back" class="waves-effect waves-light btn">
-                    <i class="mdi-content-reply left"></i>
-                </a>
-                <a class="waves-effect waves-teal btn-flat">/home</a>
-                <a class="waves-effect waves-teal btn-flat">/file</a>
-                <a class="waves-effect waves-teal btn-flat">/Dir</a>
+                <a id="path-back" class="waves-effect waves-teal btn-flat"><-back</a>
+                <a id="url" class="waves-effect waves-teal btn-flat"></a>
             </div>
 
 
@@ -125,7 +112,7 @@
                             <input type="file" class="btn-flat" name="file_upload"/>
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" class="btn-flat" value='Upload'/>
+                            <input type="submit" class="btn-flat modal-close" value='Upload'/>
                         </div>
                     </div>
                 </form>
@@ -153,7 +140,6 @@
 			<div class="row fileview-content">
 			</div>
 		</div>
-		<div id="message"></div>
 	</div>
 
 </div>

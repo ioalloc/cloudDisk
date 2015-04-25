@@ -73,15 +73,17 @@ $(document).ready(function  () {
 
     $('#new-folder').click(function(){
         var folder = $('#new-folder-name').val();
-        $('#folder-dialog').closeModal();
         $.ajax({
             method: "POST",
             url: 'server/createdir',
-            data: {dir:folder},
-            dataType: 'json'
-        }).done(function(data,status){
-            alert('ss');
+            data: {dir:folder}
+        }).done(function(){
+            getDir(path);
+            Materialize.toast();
+        }).fail(function(){
+            alert('Create folder failed!');
         });
+        $('#folder-dialog').closeModal();
     });
 
     $('#path-back').click(function(){
@@ -134,6 +136,14 @@ $(document).on('click','div.file',function(){
     if(files[$(this).index()]['type'] == 'dir'){
         path.push(files[$(this).index()]['name']);
         getDir(path);
+    }else{
+        $(this).find('.file-img').css('border','4px solid #26A69A');
+        //alert($(this).css('background-color'));
+        //if($(this).css('background-color') == 'red'){
+        //    $(this).css('background-color','white');
+        //}else {
+        //    $(this).css('background-color', 'red');
+        //}
     }
 });
 
@@ -143,12 +153,12 @@ locationToTome = function(){
 
 getDir = function(path){
     var url = '/';
-    $.each(path,function(i,dir){
-        url = url + dir;
-    })
-
-    url = url + '/';
-
+    if(path.length != 0) {
+        $.each(path, function (i, dir) {
+            url = url + dir + '/';
+        })
+    }
+    $('#url').html(url);
     $.ajax({
         method: "POST",
         url: 'server/getdir',
@@ -177,11 +187,11 @@ getDir = function(path){
                 }
                 var img;
                 if (item['type'] == 'file') {
-                    img = '<img src="icon/' +
+                    img = '<img class="file-img" src="icon/' +
                     item['icon'] +
                     '"/> ';
                 } else {
-                    img = '<img src="icon/folder.svg"/> ';
+                    img = '<img class="file-img" src="icon/folder.svg"/> ';
                 }
                 var file =
                     '<div id="' +

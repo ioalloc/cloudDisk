@@ -145,8 +145,8 @@ class server extends Service {
     public function action_createdir(){
         session_start();
         if(isset($_SESSION['user'])){
-            //mkdir($_SESSION['user_dir'] . $_POST['dir']);
-            return 'url:' . $_SESSION['user_dir'] . $_POST['dir'];
+            mkdir($_SESSION['user_dir'] . $_POST['dir']);
+        }else{
         }
     }
 
