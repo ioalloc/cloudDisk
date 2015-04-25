@@ -1,7 +1,7 @@
 //js.js
 
 var files;
-var path = new Array();
+var path = [];
 
 $(document).ready(function  () {
 
@@ -71,14 +71,31 @@ $(document).ready(function  () {
 		});
 	});
 
+    $('#new-folder').click(function(){
+        var folder = $('#new-folder-name').val();
+        $('#folder-dialog').closeModal();
+        $.ajax({
+            method: "POST",
+            url: 'server/createdir',
+            data: {dir:folder},
+            dataType: 'json'
+        }).done(function(data,status){
+            alert('ss');
+        });
+    });
+
+    $('#path-back').click(function(){
+        path.pop();
+        getDir(path);
+    });
+
 	//jquery form file upload options
 	var options = {
 	beforeSend: function()
 	{
-		$("#progress").show();
+		//$("#progress").show();
 		//clear everything
 		$("#bar").width('0%');
-		$("#message").html("");
 		$("#percent").html("0%");
 	},
 	uploadProgress: function(event, position, total, percentComplete)
@@ -91,29 +108,21 @@ $(document).ready(function  () {
 		$("#bar").width('100%');
 		$("#percent").html('100%');
 	},
-	complete: function(response)
+	complete: function()
 	{
-		$("#message").html('<span style="color: green; ">'+response.responseText+"</span>");
+        $('#file-dialog').closeModal();
+        getDir(path);
 	},
 	error: function()
 	{
-		$("#message").html('<span style="color: red; "> ERROR: unable to upload files</span>');
+        alert('error');
 	}
 	};
 	//file upload ajax submit
 	$('#fileSubmit').ajaxForm(options);
 
 
-    //$('.fileview-content').children().each(function(){
-    //    $(this).click(function(){
-    //        alert(this.id);
-    //    });
-    //});
-    //
-    //$('#dir').on('click',function(){
-    //    alert(this.id);
-    //});
-
+    $('.modal-trigger').leanModal();
 
     getDir(path);
 

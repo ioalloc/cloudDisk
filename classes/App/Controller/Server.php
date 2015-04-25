@@ -7,7 +7,7 @@ use App\Service;
 class server extends Service {
 
 	protected $user;
-    protected $uploaddir = '/usr/share/nginx/uploads/';
+    protected $upload_dir = '/usr/share/nginx/uploads/';
 
 	public function action_index() {
 		if (empty($_POST)) {
@@ -32,6 +32,7 @@ class server extends Service {
 				session_start();
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $user->id;
+                $_SESSION['user_dir'] = '/';
 				$this->returns = 'success';
 			}
 		}else{
@@ -72,10 +73,11 @@ class server extends Service {
 				$user->password = $p;
 				$user->email = $e;
 				$res=$user->save();
-                mkdir($this->uploaddir.$res->id);
+                mkdir($this->upload_dir.$res->id);
 				session_start();
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $user->id;
+                $_SESSION['user_dir'] = '/';
 				$this->returns = 'success';
 			}
 		}
@@ -98,23 +100,18 @@ class server extends Service {
 	public function action_upload()
 	{
 		session_start();
-		$user = array('username' => $_SESSION['user'],
-			'user_id' => $_SESSION['user_id']);
+//		$user = array('username' => $_SESSION['user'],
+//			'user_id' => $_SESSION['user_id']);
 
 
-		$uploadfile = $this->uploaddir . $user['user_id'] . '/' . basename($_FILES['file_upload']['name']);
+		$uploadfile = $_SESSION['user_dir'] . basename($_FILES['file_upload']['name']);
 
-		echo '<pre>';
 		if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
-			echo "File is valid, and was successfully uploaded.\n";
+			return "File is valid, and was successfully uploaded.\n";
 		} else {
-			echo "Possible file upload attack!\n";
+			return "Possible file upload attack!\n";
 		}
 
-		echo 'Here is some more debugging info:';
-		print_r($_FILES);
-
-		echo "</pre>";
 
 	}
 
@@ -124,7 +121,8 @@ class server extends Service {
     public function action_getdir(){
         session_start();
         if(isset($_SESSION['user'])) {
-            $dir = $this->uploaddir . $_SESSION['user_id'] . $_POST['dir'] . '*';
+            $_SESSION['user_dir'] = $this->upload_dir . $_SESSION['user_id'] . $_POST['dir'];
+            $dir = $_SESSION['user_dir'] . '*';
             $res = glob($dir);
             $filelist = array();
             $fileinfo = array();
@@ -141,6 +139,14 @@ class server extends Service {
             echo json_encode($filelist);
             //print_r($filelist);
 
+        }
+    }
+
+    public function action_createdir(){
+        session_start();
+        if(isset($_SESSION['user'])){
+            //mkdir($_SESSION['user_dir'] . $_POST['dir']);
+            return 'url:' . $_SESSION['user_dir'] . $_POST['dir'];
         }
     }
 

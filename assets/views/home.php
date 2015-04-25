@@ -71,6 +71,9 @@
             </li>
             <li>
                 <div class="collapsible-header">Uploading</div>
+                <div class="progress button-on">
+                    <div class="determinate" style="width: 65%"></div>
+                </div>
                 <div class="collapsible-body">
                     <p>There is no file uploading.</p>
                 </div>
@@ -78,8 +81,14 @@
             <li class="divider"></li>
             <li>
                 <div class="collapsible-header">Downloading</div>
+                <div class="progress button-on">
+                    <div class="determinate" style="width: 44%"></div>
+                </div>
                 <div class="collapsible-body">
-                    <p>There is no file downloading.</p>
+                    <div class="progress progress-list">
+                        <div class="determinate center" style="width: 44%">
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -87,46 +96,53 @@
   </div>
 
 <!--    file submit form    -->
-  <div class="col s9 m9">
-      <div class="toolbar">
-          <div class="buttons">
-              <a class="waves-effect waves-light btn">
-                  <i class="mdi-file-cloud-upload left"></i>
-                  Upload
-              </a>
-              <a class="waves-effect waves-light btn">
-                  <i class="mdi-content-add-box left"></i>
-                  New Folder
-              </a>
-          </div>
-          <div class="row path">
-              <a class="waves-effect waves-teal btn-flat">/home</a>
-              <a class="waves-effect waves-teal btn-flat">/file</a>
-              <a class="waves-effect waves-teal btn-flat">/Dir</a>
-          </div>
-<!--          <form id="fileSubmit" action="server/upload" method="post" enctype="multipart/form-data">-->
-<!--            <div class="file-field input-field">-->
-<!--                <div class="row">-->
+    <div class="col s9 m9">
+        <div class="toolbar">
+            <div class="buttons">
+                <a id="upload" class="waves-effect waves-light btn modal-trigger" href="#file-dialog">
+                    <i class="mdi-file-cloud-upload left"></i>
+                    Upload
+                </a>
+                <a class="waves-effect waves-light btn modal-trigger" href="#folder-dialog">
+                    <i class="mdi-content-add-box left"></i>
+                    New Folder
+                </a>
+            </div>
+            <div class="row path">
+                <a id="path-back" class="waves-effect waves-light btn">
+                    <i class="mdi-content-reply left"></i>
+                </a>
+                <a class="waves-effect waves-teal btn-flat">/home</a>
+                <a class="waves-effect waves-teal btn-flat">/file</a>
+                <a class="waves-effect waves-teal btn-flat">/Dir</a>
+            </div>
 
-<!--                    file select button      -->
-<!--                    <div class="col s1 btn">-->
-<!--                        <span>File</span>-->
-<!--                        <input type="file" name="file_upload"/>-->
-<!--                    </div>-->
 
-<!--                    file path-->
-<!--                    <div class="col s8">-->
-<!--                      <input class="file-path validate" type="text"/>-->
-<!--                    </div>-->
-<!---->
-<!--                    submit button-->
-<!--                    <div class="col s1">-->
-<!--                      <input type="submit" class="" value='Upload'/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--          </form>-->
-      </div>
+            <div id="file-dialog" class="modal">
+                <form id="fileSubmit" action="server/upload" method="post" enctype="multipart/form-data">
+                    <div class="input-field">
+                        <div class="row modal-content">
+                            <input type="file" class="btn-flat" name="file_upload"/>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn-flat" value='Upload'/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="folder-dialog" class="modal">
+                <div class="row modal-content">
+                    <div class="col s6 m6 offset-s3 offset-m3 input-field">
+                        <input id="new-folder-name" type="text" class="validate">
+                        <label for="new-folder-name">New folder name</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="new-folder" class="modal-action waves-effect waves-green btn-flat ">Agree</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
+                </div>
+            </div>
+        </div>
 <!--		<div id="progress">-->
 <!--			<div id="bar"></div>-->
 <!--			<div id="percent">0%</div>-->
