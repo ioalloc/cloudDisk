@@ -2,6 +2,7 @@
 
 var files;
 var path = [];
+var files_selected = [];
 
 $(document).ready(function  () {
 
@@ -61,7 +62,6 @@ $(document).ready(function  () {
 
 		//post the email and password to server
 		$.post('/server/signup', {e:email,p:password}, function  (data,status) {
-            alert(data);
 			if (data == 'success') {
                 locationToTome();
 			}
@@ -79,11 +79,19 @@ $(document).ready(function  () {
             data: {dir:folder}
         }).done(function(){
             getDir(path);
-            Materialize.toast();
+            //Materialize.toast();
         }).fail(function(){
             alert('Create folder failed!');
         });
         $('#folder-dialog').closeModal();
+    });
+
+    $('#download').click(function(){
+        //alert(files_selected.toSource());
+        $.post('/server/download',{files:files_selected},function(data,status){
+            //alert(data);
+            download();
+        });
     });
 
     $('#path-back').click(function(){
@@ -133,17 +141,26 @@ $(document).ready(function  () {
 
 $(document).on('click','div.file',function(){
     //alert(files[$(this).index()]['name']);
-    if(files[$(this).index()]['type'] == 'dir'){
+    var file = files[$(this).index()];
+    if(file['type'] == 'dir'){
         path.push(files[$(this).index()]['name']);
         getDir(path);
+        files_selected = [];
+        $('#download').addClass('disabled');
     }else{
-        $(this).find('.file-img').css('border','4px solid #26A69A');
-        //alert($(this).css('background-color'));
-        //if($(this).css('background-color') == 'red'){
-        //    $(this).css('background-color','white');
-        //}else {
-        //    $(this).css('background-color', 'red');
-        //}
+        var index = files_selected.indexOf(file['name']);
+        if(index > -1){
+            files_selected.splice(index,1);
+            $(this).find('.file-img').css('border', '4px solid #ffffff');
+            if(files_selected.length < 1){
+                $('#download').addClass('disabled');
+            }
+        }
+        else {
+            $(this).find('.file-img').css('border', '4px solid #26A69A');
+            files_selected.push(file['name']);
+            $('#download').removeClass('disabled');
+        }
     }
 });
 
@@ -206,4 +223,15 @@ getDir = function(path){
             });
         }
     });
+}
+
+function download() {
+    var event = new MouseEvent('click', {
+        'view': window,
+        'bubbles': true,
+        'cancelable': true
+    });
+    var cb  = document.createElement("a");
+    cb.href = 'server/download';
+    cb.dispatchEvent(event);
 }

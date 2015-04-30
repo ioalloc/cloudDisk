@@ -46,7 +46,7 @@
 
 
 <!-- Page Layout here -->
-<div class="row">
+<div class="row main-page">
 
 
   <div class="col s3 m3">
@@ -79,6 +79,9 @@
                 </div>
             </li>
         </ul>
+        <div class="info">
+            
+        </div>
     </div>
   </div>
 
@@ -94,10 +97,10 @@
                     <i class="mdi-content-add-box left"></i>
                     New Folder
                 </a>
-                <a class="waves-effect waves-light btn disabled">
+                <button id="download" class="waves-effect waves-light btn disabled">
                     <i class="mdi-file-cloud-download left"></i>
                     Download
-                </a>
+                </button>
             </div>
             <div class="row path">
                 <a id="path-back" class="waves-effect waves-teal btn-flat"><-back</a>

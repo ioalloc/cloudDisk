@@ -43,6 +43,7 @@ class server extends Service {
 	public function action_logout()
 	{
 		session_start();
+
 		if (isset($_SESSION['user'])) {
 			unset($_SESSION['user']);
 			$this->returns = 'success';
@@ -99,6 +100,9 @@ class server extends Service {
 
 	public function action_upload()
 	{
+        if (empty($_POST)) {
+            return $this->redirect('/');
+        }
 		session_start();
 //		$user = array('username' => $_SESSION['user'],
 //			'user_id' => $_SESSION['user_id']);
@@ -115,10 +119,57 @@ class server extends Service {
 
 	}
 
+    public function action_download(){
+        session_start();
+        if(isset($_SESSION['files'])){
+            //download files
+            $new_name = $file_name = $_SESSION['files'];
+            $download_rate = 10000;  //kb
+            if(file_exists($file_name) && is_file($file_name))
+            {
+                header('Content-Description: File Transfer');//if download file
+                header('Cache-control: private');
+                header('Content-Type: application/force-download');
+                header('Content-Length: '.filesize($file_name));
+                header('Content-Disposition: attachment; filename='.$new_name);
+
+                flush();
+                $file = fopen($file_name, "r");
+                while(!feof($file))
+                {
+                    // send the current file part to the browser
+                    print fread($file, round($download_rate * 1024));
+                    // flush the content to the browser
+                    flush();
+                    // sleep one second
+                    sleep(1);
+                }
+                fclose($file);
+            }
+            else {
+                die('Error: The file '.$file_name.' does not exist!');
+            }
+
+            unset($_SESSION['files']);
+        }else{
+            //get post data and return files ready
+            if (empty($_POST)) {
+                return $this->redirect('/');
+            }
+            $files = $_POST['files'];
+            $_SESSION['files'] = $_SESSION['user_dir'] . $files[0];
+            var_dump($_SESSION);
+        }
+
+    }
+
     /**
      *
      */
     public function action_getdir(){
+        if (empty($_POST)) {
+            return $this->redirect('/');
+        }
         session_start();
         if(isset($_SESSION['user'])) {
             $_SESSION['user_dir'] = $this->upload_dir . $_SESSION['user_id'] . $_POST['dir'];
