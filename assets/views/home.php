@@ -89,17 +89,25 @@
     <div class="col s9 m9">
         <div class="toolbar">
             <div class="buttons">
-                <a id="upload" class="waves-effect waves-light btn modal-trigger" href="#file-dialog">
+                <button id="upload" class="waves-effect waves-light btn modal-trigger" href="#file-dialog">
                     <i class="mdi-file-cloud-upload left"></i>
                     Upload
-                </a>
-                <a class="waves-effect waves-light btn modal-trigger" href="#folder-dialog">
+                </button>
+                <button class="waves-effect waves-light btn modal-trigger" href="#folder-dialog">
                     <i class="mdi-content-add-box left"></i>
                     New Folder
-                </a>
+                </button>
+                <button id="btn-rename" class="waves-effect waves-light btn modal-trigger disabled" href="#file-rename">
+                    <i class="mdi-editor-border-color left"></i>
+                    Rename
+                </button>
                 <button id="download" class="waves-effect waves-light btn disabled">
                     <i class="mdi-file-cloud-download left"></i>
                     Download
+                </button>
+                <button id="btn-delete" class="waves-effect waves-light btn modal-trigger disabled" href="#file-delete">
+                    <i class="mdi-action-delete left"></i>
+                    Delete
                 </button>
             </div>
             <div class="row path">
@@ -129,6 +137,18 @@
                 </div>
                 <div class="modal-footer">
                     <a id="new-folder" class="modal-action waves-effect waves-green btn-flat ">Agree</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
+                </div>
+            </div>
+            <div id="file-rename" class="modal">
+                <div class="row modal-content">
+                    <div class="col s6 m6 offset-s3 offset-m3 input-field">
+                        <input id="new-file-name" type="text" class="validate">
+                        <label for="new-file-name">New file name</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="rename" class="modal-action waves-effect waves-green btn-flat ">Agree</a>
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
                 </div>
             </div>

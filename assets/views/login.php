@@ -1,3 +1,4 @@
+<div class="row login-header"></div>
 <div class="row">
 	<div class="card medium col s12 m4 offset-m4 center-align">
 	<div class="card-image waves-effect waves-block waves-light">

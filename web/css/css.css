@@ -7,7 +7,11 @@ body{
 }
 
 .login{
-	background-color: #ef9a9a;
+	background-color: #ef7f98;
+}
+
+.login-header{
+    height: 100px;
 }
 
 .login-title{
@@ -92,7 +96,7 @@ body{
 
 .fileview-content{
 	height: 450px;
-	overflow: auto;
+	overflow-y: scroll;
 }
 
 .file{
@@ -111,6 +115,26 @@ body{
     margin-top: 3px;
     border: 4px solid #26A69A;
     cursor: pointer;
+}
+
+.file-name{
+    /*border: 1px solid #26A69A;*/
+    height: 25px;
+}
+
+.file-name p{
+    padding: 0;
+    margin: 0;
+}
+
+.rename-ok{
+    margin: 0;
+    width: 25px;
+    height: 100%;
+    /*background-color: #0059bc;*/
+    position: relative;
+    top: -25px;
+    float: right;
 }
 
 .collapsible-body{

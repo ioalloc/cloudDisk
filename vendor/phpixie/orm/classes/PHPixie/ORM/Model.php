@@ -133,23 +133,22 @@ class Model
 	 */
 	protected static $_column_cache = array();
 
-	/**
-	 * Constructs the model. To use ORM it is enough to
-	 * just create a model like this:
-	 * <code>
-	 * class App\Model\Fairy extends \PHPixie\ORM\Model { }
-	 * </code>
-	 * By default it will assume that the name of your table
-	 * is the plural form of the models' name, the PRIMARY KEY is id,
-	 * and will use the 'default' connection. This behaviour is easy to be
-	 * changed by overriding $table, $id and $db properties.
-	 *
-	 * @param \PHPixie\Pixie $pixie Pixie dependency container
-	 * @return void
-	 * @see $table
-	 * @see $id
-	 * @see $db
-	 */
+    /**
+     * Constructs the model. To use ORM it is enough to
+     * just create a model like this:
+     * <code>
+     * class App\Model\Fairy extends \PHPixie\ORM\Model { }
+     * </code>
+     * By default it will assume that the name of your table
+     * is the plural form of the models' name, the PRIMARY KEY is id,
+     * and will use the 'default' connection. This behaviour is easy to be
+     * changed by overriding $table, $id and $db properties.
+     *
+     * @param \PHPixie\Pixie $pixie Pixie dependency container
+     * @see $table
+     * @see $id
+     * @see $db
+     */
 	public function __construct($pixie)
 	{
 		$this->pixie = $pixie;

@@ -121,6 +121,7 @@ $(document).ready(function  () {
 	complete: function()
 	{
         $('#file-dialog').closeModal();
+        //$("#bar").width('0%');
         getDir(path);
 	},
 	error: function()
@@ -139,11 +140,11 @@ $(document).ready(function  () {
 });
 
 
-$(document).on('click','div.file',function(){
+$(document).on('click','div.file img',function(){
     //alert(files[$(this).index()]['name']);
-    var file = files[$(this).index()];
+    var file = files[$(this).parent().index()];
     if(file['type'] == 'dir'){
-        path.push(files[$(this).index()]['name']);
+        path.push(file['name']);
         getDir(path);
         files_selected = [];
         $('#download').addClass('disabled');
@@ -151,15 +152,17 @@ $(document).on('click','div.file',function(){
         var index = files_selected.indexOf(file['name']);
         if(index > -1){
             files_selected.splice(index,1);
-            $(this).find('.file-img').css('border', '4px solid #ffffff');
+            $(this).css('border', '4px solid #ffffff');
             if(files_selected.length < 1){
                 $('#download').addClass('disabled');
+                $('#btn-delete').addClass('disabled');
             }
         }
         else {
-            $(this).find('.file-img').css('border', '4px solid #26A69A');
+            $(this).css('border', '4px solid #26A69A');
             files_selected.push(file['name']);
             $('#download').removeClass('disabled');
+            $('#btn-delete').removeClass('disabled');
         }
     }
 });
@@ -183,8 +186,6 @@ getDir = function(path){
         dataType: 'json'
     }).done(function(data,status){
         if(status == 'success') {
-            var fileview_content = $('.fileview-content');
-            fileview_content.empty();
             //show folder at begin,this block is to adjust data's index
             var dirCount = 0;
             for (var i = 0; i < data.length; i++) {
@@ -197,31 +198,37 @@ getDir = function(path){
             files = data;
 
             //show file view
-            $.each(data, function (i, item) {
-                var name = item['name'];
-                if (name.length > 15) {
-                    name = name.slice(0, 15) + '...';
-                }
-                var img;
-                if (item['type'] == 'file') {
-                    img = '<img class="file-img" src="icon/' +
-                    item['icon'] +
-                    '"/> ';
-                } else {
-                    img = '<img class="file-img" src="icon/folder.svg"/> ';
-                }
-                var file =
-                    '<div id="' +
-                    item['name'] +
-                    '" class="col s3 m2 file center">\n' +
-                    img +
-                    '<p>' +
-                    name +
-                    '</p>' +
-                    '</div>';
-                fileview_content.append(file);
-            });
+            show_files(files);
         }
+    });
+}
+
+function show_files(files){
+    var fileview_content = $('.fileview-content');
+    fileview_content.empty();
+    $.each(files, function (i, item) {
+        var name = item['name'];
+        if (name.length > 15) {
+            name = name.slice(0, 15) + '...';
+        }
+        var img;
+        if (item['type'] == 'file') {
+            img = '<img class="file-img" src="icon/' +
+            item['icon'] +
+            '"/> ';
+        } else {
+            img = '<img class="file-img" src="icon/folder.svg"/> ';
+        }
+        var file =
+            '<div id="' +
+            item['name'] +
+            '" class="col s3 m2 file center">\n' +
+            img +
+            '<div class="file-name"><p>' +
+            name +
+            '</p><a class="rename-ok"></a></div>' +
+            '</div>';
+        fileview_content.append(file);
     });
 }
 

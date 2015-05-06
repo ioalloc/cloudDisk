@@ -1,13 +1,14 @@
 <?php
 
 namespace App;
+use PHPixie\Controller;
 
 /**
  * Base controller
  *
  * @property-read \App\Pixie $pixie Pixie dependency container
  */
-class Page extends \PHPixie\Controller {
+class Page extends Controller {
 	//protected $auth;
 	protected $view;
 

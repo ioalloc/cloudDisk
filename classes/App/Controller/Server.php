@@ -29,7 +29,6 @@ class server extends Service {
 		error_log($e);
 		if ($user->loaded()) {
 			if ($p === $user->password) {
-				session_start();
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $user->id;
                 $_SESSION['user_dir'] = '/';
@@ -42,7 +41,6 @@ class server extends Service {
 
 	public function action_logout()
 	{
-		session_start();
 
 		if (isset($_SESSION['user'])) {
 			unset($_SESSION['user']);
@@ -75,7 +73,6 @@ class server extends Service {
 				$user->email = $e;
 				$res=$user->save();
                 mkdir($this->upload_dir.$res->id);
-				session_start();
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $user->id;
                 $_SESSION['user_dir'] = '/';
@@ -98,29 +95,40 @@ class server extends Service {
 		phpinfo();
 	}
 
-	public function action_upload()
+    /**
+     * @return string|void
+     */
+    public function action_upload()
 	{
-        if (empty($_POST)) {
+        if (empty($_FILES)) {
             return $this->redirect('/');
         }
-		session_start();
-//		$user = array('username' => $_SESSION['user'],
-//			'user_id' => $_SESSION['user_id']);
-
 
 		$uploadfile = $_SESSION['user_dir'] . basename($_FILES['file_upload']['name']);
 
-		if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
-			return "File is valid, and was successfully uploaded.\n";
-		} else {
-			return "Possible file upload attack!\n";
-		}
+        if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
+            $user_id = $_SESSION['user_id'];
+            $file_name = basename($_FILES['file_upload']['name']);
+            $file_type = $_FILES['file_upload']['type'];
+            $upload_time = date("Y-m-d G:i:s");
+            $modify_time = $upload_time;
+            $file_path = $_SESSION['user_dir'];
+            $file_table = $this->pixie->orm->get('files');
+            $file_table->user_id = $user_id;
+            $file_table->filename = $file_name;
+            $file_table->filetype = $file_type;
+            $file_table->uploadtime = $upload_time;
+            $file_table->modifytime = $modify_time;
+            $file_table->path = $file_path;
+            $result = $file_table->save();
+            return "File is valid, and was successfully uploaded.\n";
+        } else {
+            return "Possible file upload attack!\n";
+        }
 
-
-	}
+    }
 
     public function action_download(){
-        session_start();
         if(isset($_SESSION['files'])){
             //download files
             $new_name = $file_name = $_SESSION['files'];
@@ -170,7 +178,6 @@ class server extends Service {
         if (empty($_POST)) {
             return $this->redirect('/');
         }
-        session_start();
         if(isset($_SESSION['user'])) {
             $_SESSION['user_dir'] = $this->upload_dir . $_SESSION['user_id'] . $_POST['dir'];
             $dir = $_SESSION['user_dir'] . '*';
@@ -194,7 +201,6 @@ class server extends Service {
     }
 
     public function action_createdir(){
-        session_start();
         if(isset($_SESSION['user'])){
             mkdir($_SESSION['user_dir'] . $_POST['dir']);
         }else{
