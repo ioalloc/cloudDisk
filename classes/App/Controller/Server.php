@@ -6,7 +6,6 @@ use App\Service;
 
 class server extends Service {
 
-	protected $user;
     protected $upload_dir = '/usr/share/nginx/uploads/';
 
 	public function action_index() {
@@ -26,7 +25,6 @@ class server extends Service {
 			 ->where('email',$e)
 			 ->find();
 		//if login success,and redirect to home
-		error_log($e);
 		if ($user->loaded()) {
 			if ($p === $user->password) {
 				$_SESSION['user'] = $e;
@@ -107,20 +105,28 @@ class server extends Service {
 		$uploadfile = $_SESSION['user_dir'] . basename($_FILES['file_upload']['name']);
 
         if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
+
+
+
             $user_id = $_SESSION['user_id'];
             $file_name = basename($_FILES['file_upload']['name']);
             $file_type = $_FILES['file_upload']['type'];
             $upload_time = date("Y-m-d G:i:s");
             $modify_time = $upload_time;
             $file_path = $_SESSION['user_dir'];
-            $file_table = $this->pixie->orm->get('files');
-            $file_table->user_id = $user_id;
-            $file_table->filename = $file_name;
-            $file_table->filetype = $file_type;
-            $file_table->uploadtime = $upload_time;
-            $file_table->modifytime = $modify_time;
-            $file_table->path = $file_path;
-            $result = $file_table->save();
+            $file_size = $_FILES['file_upload']['size'];
+
+            $this->user->size_used += $file_size;
+            $this->user->save();
+
+            $this->files->user_id = $user_id;
+            $this->files->filename = $file_name;
+            $this->files->filetype = $file_type;
+            $this->files->uploadtime = $upload_time;
+            $this->files->modifytime = $modify_time;
+            $this->files->path = $file_path;
+            $this->files->size = $file_size;
+            $result = $this->files->save();
             return "File is valid, and was successfully uploaded.\n";
         } else {
             return "Possible file upload attack!\n";
@@ -169,6 +175,13 @@ class server extends Service {
             var_dump($_SESSION);
         }
 
+    }
+
+    public function action_delete(){
+        if (empty($_POST)) {
+            return $this->redirect('/');
+        }
+        var_dump($_POST);
     }
 
     /**

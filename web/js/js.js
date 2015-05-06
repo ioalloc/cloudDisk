@@ -94,6 +94,32 @@ $(document).ready(function  () {
         });
     });
 
+    $('#btn-delete').click(function(){
+        if(path.length != 0){
+            if(files_selected.length != 0){
+                $('#file-delete').openModal();
+            }
+            else{
+                $('#folder-delete').openModal();
+            }
+        }else{
+            if(files_selected.length != 0){
+                $('#file-delete').openModal();
+            }
+        }
+    });
+
+    $('#delete-file').click(function(){
+        $('#file-delete').closeModal();
+        $.post('server/delete',{type:'file',files:files_selected},function(data){
+            alert(data);
+        });
+    });
+
+    $('#delete-folder').click(function(){
+        $('#folder-delete').closeModal();
+    });
+
     $('#path-back').click(function(){
         path.pop();
         getDir(path);
@@ -177,6 +203,7 @@ getDir = function(path){
         $.each(path, function (i, dir) {
             url = url + dir + '/';
         })
+    }else{
     }
     $('#url').html(url);
     $.ajax({
@@ -204,6 +231,11 @@ getDir = function(path){
 }
 
 function show_files(files){
+    if(path.length != 0){
+        $('#btn-delete').removeClass('disabled');
+    }else{
+        $('#btn-delete').addClass('disabled');
+    }
     var fileview_content = $('.fileview-content');
     fileview_content.empty();
     $.each(files, function (i, item) {

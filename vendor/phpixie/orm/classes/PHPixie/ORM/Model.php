@@ -25,7 +25,7 @@ class Model
 {
 
 	/**
-	 * Pixie Dependancy Container
+	 * Pixie Dependency Container
 	 * @var \PHPixie\Pixie
 	 */
 	public $pixie;
