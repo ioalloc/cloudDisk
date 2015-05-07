@@ -72,6 +72,23 @@ create table files(
 | size       | int(11)   | YES  |     | NULL    |                |
 +------------+-----------+------+-----+---------+----------------+
 
+delimiter $
+create trigger file_added
+after insert on files
+for each row
+begin
+	update users set size_used=size_used+new.size where id=new.user_id;
+end$
+
+
+delimiter $
+create trigger file_deleted
+after delete on files
+for each row
+begin
+	update users set size_used=size_used-old.size where id=old.user_id;
+end$
+
 ~~~
 ###PHP
 1.简介

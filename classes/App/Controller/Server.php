@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service;
+use ZipArchive;
 
 class server extends Service {
 
@@ -21,14 +22,14 @@ class server extends Service {
         }
 		$e = $_POST['e'];
 		$p = md5($_POST['p']);
-		$user = $this->pixie->orm->get('users')
+		$this->user = $this->pixie->orm->get('users')
 			 ->where('email',$e)
 			 ->find();
 		//if login success,and redirect to home
-		if ($user->loaded()) {
-			if ($p === $user->password) {
+		if ($this->user->loaded()) {
+			if ($p === $this->user->password) {
 				$_SESSION['user'] = $e;
-				$_SESSION['user_id'] = $user->id;
+				$_SESSION['user_id'] = $this->user->id;
                 $_SESSION['user_dir'] = '/';
 				$this->returns = 'success';
 			}
@@ -59,20 +60,20 @@ class server extends Service {
 			if ($e === '' || $p === '') {
 				return $this->redirect('/signup');
 			}
-			$user = $this->pixie->orm->get('users')
+			$this->user = $this->pixie->orm->get('users')
 				 ->where('email',$e)
 				 ->find();
 			//if the email is exist
-			if ($user->loaded()) {
+			if ($this->user->loaded()) {
 				$this->returns = 'failure';
 			}else{
-				$user->username = $e;
-				$user->password = $p;
-				$user->email = $e;
-				$res=$user->save();
+				$this->user->username = $e;
+				$this->user->password = $p;
+				$this->user->email = $e;
+				$res=$this->user->save();
                 mkdir($this->upload_dir.$res->id);
 				$_SESSION['user'] = $e;
-				$_SESSION['user_id'] = $user->id;
+				$_SESSION['user_id'] = $this->user->id;
                 $_SESSION['user_dir'] = '/';
 				$this->returns = 'success';
 			}
@@ -102,22 +103,26 @@ class server extends Service {
             return $this->redirect('/');
         }
 
-		$uploadfile = $_SESSION['user_dir'] . basename($_FILES['file_upload']['name']);
-
+		$uploadfile = $basefile = $_SESSION['user_dir'] . basename($_FILES['file_upload']['name']);
+        $count = 1;
+        while(file_exists($uploadfile)){
+            $uploadfile = $basefile . '(' . $count . ')';
+            $count += 1;
+        }
         if (move_uploaded_file($_FILES['file_upload']['tmp_name'], $uploadfile)) {
 
 
 
             $user_id = $_SESSION['user_id'];
-            $file_name = basename($_FILES['file_upload']['name']);
+            $file_name = basename($uploadfile);
             $file_type = $_FILES['file_upload']['type'];
             $upload_time = date("Y-m-d G:i:s");
             $modify_time = $upload_time;
             $file_path = $_SESSION['user_dir'];
             $file_size = $_FILES['file_upload']['size'];
 
-            $this->user->size_used += $file_size;
-            $this->user->save();
+//            $this->user->size_used += $file_size;
+//            $this->user->save();
 
             $this->files->user_id = $user_id;
             $this->files->filename = $file_name;
@@ -145,7 +150,7 @@ class server extends Service {
                 header('Cache-control: private');
                 header('Content-Type: application/force-download');
                 header('Content-Length: '.filesize($file_name));
-                header('Content-Disposition: attachment; filename='.$new_name);
+                header('Content-Disposition: attachment; filename='.basename($new_name));
 
                 flush();
                 $file = fopen($file_name, "r");
@@ -159,9 +164,10 @@ class server extends Service {
                     sleep(1);
                 }
                 fclose($file);
+                unlink($file_name);
             }
             else {
-                die('Error: The file '.$file_name.' does not exist!');
+                echo('Error: The file '.$file_name.' does not exist!');
             }
 
             unset($_SESSION['files']);
@@ -171,8 +177,26 @@ class server extends Service {
                 return $this->redirect('/');
             }
             $files = $_POST['files'];
-            $_SESSION['files'] = $_SESSION['user_dir'] . $files[0];
-            var_dump($_SESSION);
+            if(count($files) == 1) {
+                symlink($_SESSION['user_dir'] . $files[0],
+                    $_SESSION['user_dir'] . '.tmp/' . $files[0]);
+                $_SESSION['files'] = $_SESSION['user_dir'] . '.tmp/' . $files[0];
+            }else{
+                $zip = new ZipArchive();
+                $file_name = '/usr/share/nginx/uploads/27/.tmp/files.zip';
+                if ($zip->open($file_name, ZIPARCHIVE::CREATE)!==TRUE) {
+                    exit("cannot open <$file_name>\n");
+                }
+                foreach($files as $file){
+                    $zip->addFile($_SESSION['user_dir'] . $file,$file);
+                }
+                $zip->close();
+                if(isset($_SESSION['files'])){
+                    unset($_SESSION['files']);
+                }
+                $_SESSION['files'] = $file_name;
+                var_dump($_SESSION);
+            }
         }
 
     }
@@ -181,7 +205,21 @@ class server extends Service {
         if (empty($_POST)) {
             return $this->redirect('/');
         }
-        var_dump($_POST);
+        if($_POST['type'] === 'file') {
+            foreach($_POST['files'] as $file){
+                //unlink file
+                if(unlink($_SESSION['user_dir'].$file)){
+                    //delete from database,and set the user used_size
+                    $f = $this->files
+                        ->where('filename',$file)
+                        ->where('path',$_SESSION['user_dir'])
+                        ->find();
+//                    $this->user->size_used -= $this->files->size;
+                    $f->delete();
+                }
+            }
+            $this->returns = 'success';
+        }
     }
 
     /**
@@ -218,6 +256,22 @@ class server extends Service {
             mkdir($_SESSION['user_dir'] . $_POST['dir']);
         }else{
         }
+    }
+
+    public function action_test(){
+        $zip = new ZipArchive();
+        $filename = "/usr/share/nginx/uploads/27/.tmp/test.zip";
+
+        if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
+            exit("cannot open <$filename>\n");
+        }
+
+        $zip->addFromString("test_file_php.txt" . time(), "#1 This is a test string added as testfilephp.txt.\n");
+        $zip->addFromString("test_file_php2.txt" . time(), "#2 This is a test string added as testfilephp2.txt.\n");
+//        $zip->addFile($thisdir . "/too.php","/testfromfile.php");
+        echo "num_files: " . $zip->numFiles . "\n";
+        echo "status:" . $zip->status . "\n";
+        $zip->close();
     }
 
     function formatBytes($size, $precision = 2)

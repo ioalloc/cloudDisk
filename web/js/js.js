@@ -113,6 +113,7 @@ $(document).ready(function  () {
         $('#file-delete').closeModal();
         $.post('server/delete',{type:'file',files:files_selected},function(data){
             alert(data);
+            getDir(path);
         });
     });
 
