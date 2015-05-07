@@ -195,7 +195,6 @@ class server extends Service {
                     unset($_SESSION['files']);
                 }
                 $_SESSION['files'] = $file_name;
-                var_dump($_SESSION);
             }
         }
 
