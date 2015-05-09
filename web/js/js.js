@@ -10,6 +10,7 @@ $(document).ready(function  () {
     //$('.collapsible').collapsible({
     //    accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
     //});
+    getinfo();
 
 	// input detect
 	$('#signup-form').find('#email').blur(function  () {
@@ -88,7 +89,7 @@ $(document).ready(function  () {
 
     $('#download').click(function(){
         //alert(files_selected.toSource());
-        $.post('/server/download',{files:files_selected},function(data,status){
+        $.get('/server/download',{files:files_selected},function(data,status){
             //alert(data);
             download();
         });
@@ -112,18 +113,40 @@ $(document).ready(function  () {
     $('#delete-file').click(function(){
         $('#file-delete').closeModal();
         $.post('server/delete',{type:'file',files:files_selected},function(data){
-            alert(data);
             getDir(path);
+            getinfo();
         });
     });
 
     $('#delete-folder').click(function(){
         $('#folder-delete').closeModal();
+        $.post('server/delete',{type:'folder',folder:path},function(data){
+            path.pop();
+            getDir(path);
+            getinfo();
+        });
     });
 
     $('#path-back').click(function(){
         path.pop();
         getDir(path);
+    });
+
+    $('#home').click(function(){
+        path = [];
+        getDir(path);
+    });
+    $('#video').click(function(){
+        getfiles('video');
+    });
+    $('#music').click(function(){
+        getfiles('audio');
+    });
+    $('#image').click(function(){
+        getfiles('image');
+    });
+    $('#recently').click(function(){
+        getfiles('recently');
     });
 
 	//jquery form file upload options
@@ -149,6 +172,7 @@ $(document).ready(function  () {
 	{
         $('#file-dialog').closeModal();
         //$("#bar").width('0%');
+        getinfo();
         getDir(path);
 	},
 	error: function()
@@ -208,7 +232,7 @@ getDir = function(path){
     }
     $('#url').html(url);
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: 'server/getdir',
         data: {dir:url},
         dataType: 'json'
@@ -229,6 +253,14 @@ getDir = function(path){
             show_files(files);
         }
     });
+}
+
+function getfiles(type){
+    $.get('server/getfiles',{type:type},function(data){
+        $('#url').html('');
+        files = data;
+        show_files(files);
+    },'json')
 }
 
 function show_files(files){
@@ -274,4 +306,12 @@ function download() {
     var cb  = document.createElement("a");
     cb.href = 'server/download';
     cb.dispatchEvent(event);
+}
+
+function getinfo(){
+    var info = $('#info').children();
+    $.get('server/getinfo',{get:'info'},function(data){
+        info.children().width(data['percent']);
+        info[1].innerHTML = data['size_used']+'/'+data['size_max'];
+    },'json')
 }

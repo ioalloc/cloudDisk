@@ -64,7 +64,7 @@ create table files(
 +------------+-----------+------+-----+---------+----------------+
 | id         | int(11)   | NO   | PRI | NULL    | auto_increment |
 | user_id    | int(11)   | NO   | MUL | NULL    |                |
-| filename   | char(50)  | NO   |     | NULL    |                |
+| filename   | char(128) | NO   |     | NULL    |                |
 | filetype   | char(50)  | YES  |     | NULL    |                |
 | uploadtime | datetime  | YES  |     | NULL    |                |
 | modifytime | datetime  | YES  |     | NULL    |                |

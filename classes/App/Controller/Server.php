@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Service;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ZipArchive;
 
 class server extends Service {
@@ -72,6 +74,7 @@ class server extends Service {
 				$this->user->email = $e;
 				$res=$this->user->save();
                 mkdir($this->upload_dir.$res->id);
+                mkdir($this->upload_dir.$res->id.'/.tmp');
 				$_SESSION['user'] = $e;
 				$_SESSION['user_id'] = $this->user->id;
                 $_SESSION['user_dir'] = '/';
@@ -173,28 +176,29 @@ class server extends Service {
             unset($_SESSION['files']);
         }else{
             //get post data and return files ready
-            if (empty($_POST)) {
+            if (empty($_GET)) {
                 return $this->redirect('/');
-            }
-            $files = $_POST['files'];
-            if(count($files) == 1) {
-                symlink($_SESSION['user_dir'] . $files[0],
-                    $_SESSION['user_dir'] . '.tmp/' . $files[0]);
-                $_SESSION['files'] = $_SESSION['user_dir'] . '.tmp/' . $files[0];
-            }else{
-                $zip = new ZipArchive();
-                $file_name = '/usr/share/nginx/uploads/27/.tmp/files.zip';
-                if ($zip->open($file_name, ZIPARCHIVE::CREATE)!==TRUE) {
-                    exit("cannot open <$file_name>\n");
+            }else {
+                $files = $_GET['files'];
+                if (count($files) == 1) {
+                    symlink($_SESSION['user_dir'] . $files[0],
+                        $_SESSION['user_dir'] . '.tmp/' . $files[0]);
+                    $_SESSION['files'] = $_SESSION['user_dir'] . '.tmp/' . $files[0];
+                } else {
+                    $zip = new ZipArchive();
+                    $file_name = '/usr/share/nginx/uploads/27/.tmp/files.zip';
+                    if ($zip->open($file_name, ZIPARCHIVE::CREATE) !== TRUE) {
+                        exit("cannot open <$file_name>\n");
+                    }
+                    foreach ($files as $file) {
+                        $zip->addFile($_SESSION['user_dir'] . $file, $file);
+                    }
+                    $zip->close();
+                    if (isset($_SESSION['files'])) {
+                        unset($_SESSION['files']);
+                    }
+                    $_SESSION['files'] = $file_name;
                 }
-                foreach($files as $file){
-                    $zip->addFile($_SESSION['user_dir'] . $file,$file);
-                }
-                $zip->close();
-                if(isset($_SESSION['files'])){
-                    unset($_SESSION['files']);
-                }
-                $_SESSION['files'] = $file_name;
             }
         }
 
@@ -218,6 +222,30 @@ class server extends Service {
                 }
             }
             $this->returns = 'success';
+        }elseif($_POST['type'] === 'folder'){
+            $dir = $this->upload_dir . $_SESSION['user_id'];
+            foreach($_POST['folder'] as $path){
+                $dir .= '/'.$path;
+            }
+            $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new RecursiveIteratorIterator($it,
+                RecursiveIteratorIterator::CHILD_FIRST);
+            foreach($files as $file) {
+                if ($file->isDir()){
+                    rmdir($file->getRealPath());
+                } else {
+                    $path = pathinfo($file->getRealPath())['dirname'] . '/';
+                    $filename = pathinfo($file->getRealPath())['basename'];
+
+                    $f = $this->files
+                        ->where('filename',$filename)
+                        ->where('path',$path)
+                        ->find();
+                    $f->delete();
+                    unlink($file->getRealPath());
+                }
+            }
+            rmdir($dir);
         }
     }
 
@@ -225,11 +253,11 @@ class server extends Service {
      *
      */
     public function action_getdir(){
-        if (empty($_POST)) {
+        if (empty($_GET)) {
             return $this->redirect('/');
         }
         if(isset($_SESSION['user'])) {
-            $_SESSION['user_dir'] = $this->upload_dir . $_SESSION['user_id'] . $_POST['dir'];
+            $_SESSION['user_dir'] = $this->upload_dir . $_SESSION['user_id'] . $_GET['dir'];
             $dir = $_SESSION['user_dir'] . '*';
             $res = glob($dir);
             $filelist = array();
@@ -257,20 +285,42 @@ class server extends Service {
         }
     }
 
-    public function action_test(){
-        $zip = new ZipArchive();
-        $filename = "/usr/share/nginx/uploads/27/.tmp/test.zip";
-
-        if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-            exit("cannot open <$filename>\n");
+    public function action_getfiles(){
+        if (empty($_GET)) {
+            return $this->redirect('/');
         }
+        $filelist = array();
+        $fileinfo = array();
+        $type = $_GET['type'];
+        if($type === 'recently'){
+            $res = $this->files->order_by('uploadtime','desc')->limit(20)->find_all();
+        }else {
+            $res = $this->files->where('filetype', 'like', '%' . $type . '%')->find_all();
+        }
+        foreach ($res as $file) {
+            $fileinfo['name'] = $file->filename;
+            $fileinfo['type'] = 'file';
+            $fileinfo['path'] = $file->path;
+            $fileinfo['extension'] = $icon = pathinfo($file->filename, PATHINFO_EXTENSION);
+            $icon = '/usr/share/nginx/cloudDisk/web/icon/' . $icon . '.svg';
+            $fileinfo['icon'] = (basename(implode(glob($icon))) == '') ? 'blank.svg' : basename(implode(glob($icon)));
+            array_push($filelist, $fileinfo);
+        }
+        echo json_encode($filelist);
+    }
 
-        $zip->addFromString("test_file_php.txt" . time(), "#1 This is a test string added as testfilephp.txt.\n");
-        $zip->addFromString("test_file_php2.txt" . time(), "#2 This is a test string added as testfilephp2.txt.\n");
-//        $zip->addFile($thisdir . "/too.php","/testfromfile.php");
-        echo "num_files: " . $zip->numFiles . "\n";
-        echo "status:" . $zip->status . "\n";
-        $zip->close();
+    public function action_getinfo(){
+        $info = array();
+        $user = $this->pixie->orm->get('users')
+            ->where('id',$_SESSION['user_id'])
+            ->find();
+        if($user->loaded()){
+            $info['level'] = $user->level;
+            $info['size_used'] = $this->formatBytes($user->size_used);
+            $info['size_max'] = $this->formatBytes($user->size_max);
+            $info['percent'] = $user->size_used*100/$user->size_max;
+            echo json_encode($info);
+        }
     }
 
     function formatBytes($size, $precision = 2)
