@@ -57,6 +57,7 @@ create table files(
 	uploadtime datetime,
 	modifytime datetime,
 	path char(128) not null,
+	size int(11),
 	foreign key (user_id) references users(id)
 	);
 +------------+-----------+------+-----+---------+----------------+
